@@ -6,7 +6,7 @@
   }
   
   body {
-    background-color: #b8439d;
+    background-color: #ce88bd;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -67,7 +67,7 @@
   }
   
   .key-operate {
-    background: #ff9501;
+    background: #e18c14;
   }
   
   .key-others {

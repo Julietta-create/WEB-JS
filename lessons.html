@@ -3,10 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор розкладу</title>
+    <title>Schedule Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .schedule {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .schedule th, .schedule td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .schedule th {
+            background-color: #f2f2f2;
+        }
+        #fileInput, #processButton {
+            margin-bottom: 10px;
+        }
+        #scheduleContainer {
+            text-align: center;
+            
+        }
+    </style>
 </head>
 <body>
-    <div id="schedule"></div>
-    <script src="lessons.js"></script>
+    <div class="container">
+        <input type="file" id="fileInput">
+        <button id="processButton">Process Schedule</button>
+        <h2>Schedule</h2>
+        <table class="schedule" id="scheduleTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Subject</th>
+                    <th>Time</th>
+                    <th>Teacher</th>
+                    <th>Classroom</th>
+                </tr>
+            </thead>
+            <tbody id="scheduleBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById('processButton').addEventListener('click', function() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = function(event) {
+                    const content = event.target.result;
+                    const data = JSON.parse(content);
+                    const scheduleBody = document.getElementById('scheduleBody');
+                    const scheduleTable = document.getElementById('scheduleTable');
+                    scheduleBody.innerHTML = ''; 
+                    data.schedule.forEach(day => {
+                        day.lessonList.forEach(lesson => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${day.date}</td>
+                                <td>${lesson.subject}</td>
+                                <td>${lesson.time}</td>
+                                <td>${lesson.teacher}</td>
+                                <td>${lesson.classroom}</td>
+                            `;
+                            scheduleBody.appendChild(row);
+                        });
+                    });
+                    scheduleTable.style.display = 'block'; 
+                };
+            } else {
+                alert('Please select a file.');
+            }
+        });
+    </script>
 </body>
 </html>
